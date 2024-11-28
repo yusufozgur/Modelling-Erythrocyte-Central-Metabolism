@@ -16,32 +16,27 @@
 #set heading(numbering: "1.")
 #show heading.where(level: 1): set text(size: 1.1em)
 
+#show figure: set par(justify: false)
+#show figure: block.with(above: 1.5em, below: 1.5em)
 #show figure.caption: it => [
   *#it.supplement #context it.counter.display(it.numbering):* #it.body
 ]
 
-#show figure: block.with(above: 1.5em, below: 1.5em)
-
 #place(
   top + center,
   scope: "parent",
   float: true,
-)[// Title
+)[
+  // Title
   #set text(size: 22pt)
   #set align(center)
   Modelling Erythroctye Central Metabolism Informs Parasitic Drug Development
-]
 
-#place(
-  top + center,
-  scope: "parent",
-  float: true,
-)[// Author
+  // Author
   #set text(size: 15pt)
   #set align(center)
   Yusuf Turhan
 ]
-
 
 #set par(justify: true)
 
@@ -116,19 +111,14 @@ An array of different models with differing complexity were created in our eryth
 
 This model includes the GLUT1 facilitative diffusion transporter, reactions of glycolysis, and energy expenditure function and a pyruvate outflux function. It does not take rapaport luebering shunt or lactate dehydrogenase into account. The reactions of our model are detailed in @reactions. The reaction parameters found on the literature are reported in @parameters. Other reaction parameters were estimated in @parameter_estimation. The species starting concentrations were specified as ATP 1.6 mM @Pospieszna2021, ADP 0.2 mM @Pospieszna2021, and Glu 5mM @LoyolaLeyva2022. All other species' starting concentrations were set to 0mM.
 
-#[
-  #set par(justify: false)
-  #show table: set block(width: 100%)
-
-  #figure(
-    reactions_table,
-    caption: figure.caption(position: top)[
-      Reactions that are defined in our model.
-    ],
-    scope: "parent",
-    placement: top,
-  ) <reactions>
-]
+#figure(
+  reactions_table,
+  caption: figure.caption(position: top)[
+    Reactions that are defined in our model.
+  ],
+  scope: "parent",
+  placement: top,
+) <reactions>
 
 #page()[
   #figure(
@@ -163,24 +153,18 @@ After the steady state achievement in the parameter estimation step, a time cour
 
 == Steady state analysis
 
-
+A steady state achievement can be deduced by inspecting the time course analysis, but it is better to run a steady state analysis and report the results. Steady state reaction fluxes can be found at @steady_state_reaction_fluxes and steady state species concentrations can be found at @steady_state_species_table.
 
 #[
-  A steady state achievement can be deduced by inspecting the time course analysis, but it is better to run a steady state analysis and report the results. Steady state reaction fluxes can be found at @steady_state_reaction_fluxes and steady state species concentrations can be found at @steady_state_species_table.
-
   #set text(size: .8em)
-  #set par(justify: false)
+
   #figure(
     steady_state_reaction_fluxes,
     caption: figure.caption(position: top)[
       Steady state reaction fluxes
     ],
   ) <steady_state_reaction_fluxes>
-]
 
-#[
-  #set text(size: .8em)
-  #set par(justify: false)
   #figure(
     steady_state_species_table,
     caption: figure.caption(position: top)[
