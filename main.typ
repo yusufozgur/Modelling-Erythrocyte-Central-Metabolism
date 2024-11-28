@@ -169,9 +169,15 @@ After the steady state achievement in the parameter estimation step, a time cour
   A steady state achievement can be deduced by inspecting the time course analysis, but it is better to run a steady state analysis and report the results. Steady state reaction fluxes can be found at @steady_state_reaction_fluxes and steady state species concentrations can be found at @steady_state_species_table.
 
   #set text(size: .8em)
-
-  #steady_state_reaction_fluxes
+  #set par(justify: false)
+  #figure(
+    steady_state_reaction_fluxes,
+    caption: figure.caption(position: top)[
+      Steady state reaction fluxes
+    ],
+  ) <steady_state_reaction_fluxes>
 ]
+
 #[
   #set text(size: .8em)
   #steady_state_species_table
