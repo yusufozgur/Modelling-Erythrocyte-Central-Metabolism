@@ -5,7 +5,7 @@
 #import "steady_state_species_table.typ": steady_state_species_table
 #import "steady_state_reaction_fluxes.typ": steady_state_reaction_fluxes
 
-// Default font "Libertinus Serif" looks professional enoguh
+// Default font "Libertinus Serif" looks professional enough
 
 #set page(
   margin: 2.5cm,
