@@ -125,16 +125,15 @@ This model includes the GLUT1 facilitative diffusion transporter, reactions of g
 ]
 
 #page()[
-  #place(
-    top + center,
+  #figure(
+    parameters_table,
+    caption: figure.caption(position: top)[
+      Reaction parameters found in the literature.
+    ],
+    placement: top,
     scope: "parent",
-    float: true,
-  )[
-    #parameters_table
-  ]
+  ) <parameters>
 ]
-
-
 
 == Parameter estimation <parameter_estimation>
 
