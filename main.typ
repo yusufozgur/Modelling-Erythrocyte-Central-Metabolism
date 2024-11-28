@@ -94,14 +94,14 @@ COPASI version 4.44 Build 295 @Hoops2006 was used to build and run our models. R
 
 As for the experimental data, steady state concentrations of G6P(0.038mM), F6P(0.016mM), F1,6BP(0.0076mM), DHAP(0.14mM), GA3P(0.0067mM), 1,3PG(0.004mM), 3PG(0.045mM), 2PG(0.014mM), PEP(0.017mM), Pyruvate(0.077mM), ADP(0.27mM), ATP(1.5mM) and steady state flux for hexokinase (0.000311mM/s) were obtained from #cite(<Joshi1990>, form: "prose"). Additionally, Glucose concentration(5mM) were added to the experimental variables as it was the expected steady state intracellular concentration in an erythrocyte @LoyolaLeyva2022.
 
-
-#place(
-  top + center,
+#figure(
+  formulas_table,
+  caption: [
+    Biochemical reaction velocity formulas used in our model.
+  ],
+  placement: top,
   scope: "parent",
-  float: true,
-)[
-  #formulas_table
-]
+) <formulas>
 
 = Results
 + [x] Mention this model is the simple model in a diverse array of models created
