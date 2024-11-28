@@ -1,4 +1,4 @@
-#import "glycolysis_diagram.typ": diagram_glycolysis
+#import "glycolysis_diagram.typ": diagram_glycolysis, diagram_glycolysis_with_titles
 #import "formulas_table.typ": formulas_table
 #import "reactions_table.typ": reactions_table
 #import "parameters_table.typ": parameters_table
@@ -78,8 +78,8 @@ COPASI version 4.44 Build 295 @Hoops2006 was used to build and run our models. R
   // #set align(center)
   #figure(
     [
-      #set text(font: "Cascadia Code", size: 8pt, weight: 400)
-      #diagram_glycolysis
+      #set text(font: "Cascadia Code", size: 9pt, weight: 400)
+      #diagram_glycolysis_with_titles
     ],
     caption: [ Erythrocyte central metabolism. ],
     scope: "parent",
