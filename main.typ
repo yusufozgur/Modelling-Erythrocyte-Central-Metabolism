@@ -10,11 +10,11 @@
 #set page(
   margin: 2.5cm,
   paper: "a4",
-  columns: 1
+  columns: 1,
 )
 
 #set heading(numbering: "1.")
-#show heading.where(level:1): set text(size: 1.1em)
+#show heading.where(level: 1): set text(size: 1.1em)
 
 #show figure.caption: it => [
   *#it.supplement #context it.counter.display(it.numbering):* #it.body
@@ -23,9 +23,9 @@
 #show figure: block.with(above: 1.5em, below: 1.5em)
 
 #place(
-  top+center,
+  top + center,
   scope: "parent",
-  float: true
+  float: true,
 )[// Title
   #set text(size: 22pt)
   #set align(center)
@@ -33,9 +33,9 @@
 ]
 
 #place(
-  top+center,
+  top + center,
   scope: "parent",
-  float: true
+  float: true,
 )[// Author
   #set text(size: 15pt)
   #set align(center)
@@ -88,7 +88,7 @@ COPASI version 4.44 Build 295 @Hoops2006 was used to build and run our models. R
     ],
     caption: [ Erythrocyte central metabolism. ],
     scope: "parent",
-    placement: auto
+    placement: auto,
   )
 ]
 
@@ -96,9 +96,9 @@ As for the experimental data, steady state concentrations of G6P(0.038mM), F6P(0
 
 
 #place(
-  top+center,
+  top + center,
   scope: "parent",
-  float: true
+  float: true,
 )[
   #formulas_table
 ]
@@ -117,21 +117,21 @@ An array of different models with differing complexity were created in our eryth
 This model includes the GLUT1 facilitative diffusion transporter, reactions of glycolysis, and energy expenditure function and a pyruvate outflux function. It does not take rapaport luebering shunt or lactate dehydrogenase into account. The reactions of our model are detailed in @reactions. The reaction parameters found on the literature are reported in @parameters. Other reaction parameters were estimated in @parameter_estimation. The species starting concentrations were specified as ATP 1.6 mM @Pospieszna2021, ADP 0.2 mM @Pospieszna2021, and Glu 5mM @LoyolaLeyva2022. All other species' starting concentrations were set to 0mM.
 
 #place(
-  top+center,
+  top + center,
   scope: "parent",
-  float: true
+  float: true,
 )[
   #reactions_table
 ]
 
 #page()[
   #place(
-  top+center,
-  scope: "parent",
-  float: true
-)[
-  #parameters_table
-]
+    top + center,
+    scope: "parent",
+    float: true,
+  )[
+    #parameters_table
+  ]
 ]
 
 
@@ -142,7 +142,7 @@ To save time while prototyping different model builds, steady state was achieved
 
 #figure(
   image("img/main_fit.png"),
-  caption: [Parameter estimation results]
+  caption: [Parameter estimation results],
 )<main_fit>
 
 #pagebreak()
@@ -153,7 +153,7 @@ After the steady state achievement in the parameter estimation step, a time cour
 
 #figure(
   image("img/time_course.png"),
-  caption: [Time course analysis of our model when the internal glucose concentration is set to 0 mM]
+  caption: [Time course analysis of our model when the internal glucose concentration is set to 0 mM],
 ) <time_course>
 
 == Steady state analysis
@@ -162,9 +162,9 @@ After the steady state achievement in the parameter estimation step, a time cour
 
 #[
   A steady state achievement can be deduced by inspecting the time course analysis, but it is better to run a steady state analysis and report the results. Steady state reaction fluxes can be found at @steady_state_reaction_fluxes and steady state species concentrations can be found at @steady_state_species_table.
-  
+
   #set text(size: .8em)
-  
+
   #steady_state_reaction_fluxes
 ]
 #[
@@ -180,7 +180,7 @@ To identify reaction controlling steps that can be affected by anti-parasitic dr
 
 #figure(
   image("img/mca_plot.png"),
-  caption: [Metabolic Control Analysis results showing that the reaction fluxes are controlled positively by Hexokinase and negatively by Energy Expenditure.]
+  caption: [Metabolic Control Analysis results showing that the reaction fluxes are controlled positively by Hexokinase and negatively by Energy Expenditure.],
 ) <MCA>
 
 #pagebreak()
@@ -191,7 +191,7 @@ In order to test the robustness of our model, which would mean the ability of ou
 
 #figure(
   image("img/rb_fit_plot.png", width: 30em),
-  caption: [Parameter estimation step is repeated to test robustness and parameter identifiability. Black circles represent the target experimental values, and the colored dots represent different parameter sets fitted. ATP and ADP steady state concentratios were the main hurdles for fitting.]
+  caption: [Parameter estimation step is repeated to test robustness and parameter identifiability. Black circles represent the target experimental values, and the colored dots represent different parameter sets fitted. ATP and ADP steady state concentratios were the main hurdles for fitting.],
 ) <10_parest>
 
 
@@ -199,7 +199,7 @@ After the observation that two supersets of parameter sets can be obtained by pa
 
 #figure(
   image("img/mult_mca_plot.png"),
-  caption: [Multiple MCA comparison plot shows that in all parameter sets shown, reaction fluxes controlled positively by Hexokinase and negatively by Energy Expenditure.]
+  caption: [Multiple MCA comparison plot shows that in all parameter sets shown, reaction fluxes controlled positively by Hexokinase and negatively by Energy Expenditure.],
 ) <9_mca>
 
 == Parameter Identifiability Analysis
@@ -209,7 +209,7 @@ The parameter sets obtained during @model_robustness_section were used to test t
 
 #figure(
   image("img/iden_fit_plot.png"),
-  caption: [To determine parameter identifiability, parameter values from the parameter estimation runs were plotted. We can see they show differing variation, and the more variable parameters are less identifiable. As some parameters showed very little variation at the lower bound of the parameter estimation range, we have decided to perform range expansion.]
+  caption: [To determine parameter identifiability, parameter values from the parameter estimation runs were plotted. We can see they show differing variation, and the more variable parameters are less identifiable. As some parameters showed very little variation at the lower bound of the parameter estimation range, we have decided to perform range expansion.],
 ) <par_variability>
 
 == Range Expansion
@@ -218,21 +218,21 @@ Lower and upper bounds for estimation of our non-defined parameters are expanded
 
 #figure(
   image("img/range_expansion_fits_plot.png"),
-  caption: [Parameter fits for different parameter sets in range-expansion runs. ATP and ADP were harders to fit, and three runs were not able to fit those steady states, showing inverted fits with respect to these experimental measurements. ]
+  caption: [Parameter fits for different parameter sets in range-expansion runs. ATP and ADP were harders to fit, and three runs were not able to fit those steady states, showing inverted fits with respect to these experimental measurements. ],
 ) <range_expansion_fits_plot>
 
 We then wanted to see whether our model is still robust to different estimated parameter sets in the expanded ranges. Multiple MCA comparison for the range-expansion parameter sets shown in @range_expansion_multi_plot surprises us with only one MCA showing meaningful fluxes. Which means that our model is not robust at the range-expanded parameter space.
 
 #figure(
   image("img/range_expansion_multi_plot.png"),
-  caption: [MCA comparison for the 9 parameter sets estimated with range expansion. Except for the first parameter set, all other show near-zero fluxe control coefficients.]
+  caption: [MCA comparison for the 9 parameter sets estimated with range expansion. Except for the first parameter set, all other show near-zero fluxe control coefficients.],
 ) <range_expansion_multi_plot>
 
 Plotting the estimated parameter variability plot again for range expansion in @range_expanded_par_ident_plot shows a much different picture compared to range-limited runs. Parameter variations and means are much more inconsistent with each other and the previous range-limited figures, possibly due to incomplete fitting due to increased parameter space in range-expansion.
 
 #figure(
   image("img/range_expanded_par_ident_plot.png"),
-  caption: []
+  caption: [],
 ) <range_expanded_par_ident_plot>
 
 = Discussion
@@ -249,4 +249,8 @@ Plotting the estimated parameter variability plot again for range expansion in @
   + Plotting code
   + data files
 
-#bibliography("ref.bib", style: "american-psychological-association", title: "References")
+#bibliography(
+  "ref.bib",
+  style: "american-psychological-association",
+  title: "References",
+)
