@@ -180,7 +180,13 @@ After the steady state achievement in the parameter estimation step, a time cour
 
 #[
   #set text(size: .8em)
-  #steady_state_species_table
+  #set par(justify: false)
+  #figure(
+    steady_state_species_table,
+    caption: figure.caption(position: top)[
+      Steady state concentrations
+    ],
+  ) <steady_state_species_table>
 ]
 
 #pagebreak()
