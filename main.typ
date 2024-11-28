@@ -116,12 +116,18 @@ An array of different models with differing complexity were created in our eryth
 
 This model includes the GLUT1 facilitative diffusion transporter, reactions of glycolysis, and energy expenditure function and a pyruvate outflux function. It does not take rapaport luebering shunt or lactate dehydrogenase into account. The reactions of our model are detailed in @reactions. The reaction parameters found on the literature are reported in @parameters. Other reaction parameters were estimated in @parameter_estimation. The species starting concentrations were specified as ATP 1.6 mM @Pospieszna2021, ADP 0.2 mM @Pospieszna2021, and Glu 5mM @LoyolaLeyva2022. All other species' starting concentrations were set to 0mM.
 
-#place(
-  top + center,
-  scope: "parent",
-  float: true,
-)[
-  #reactions_table
+#[
+  #set par(justify: false)
+  #show table: set block(width: 100%)
+
+  #figure(
+    reactions_table,
+    caption: figure.caption(position: top)[
+      Reactions that are defined in our model.
+    ],
+    scope: "parent",
+    placement: top,
+  ) <reactions>
 ]
 
 #page()[
