@@ -5,12 +5,11 @@
 #import "steady_state_species_table.typ": steady_state_species_table
 #import "steady_state_reaction_fluxes.typ": steady_state_reaction_fluxes
 
-#set text(font: "Inter")
-#set text(font: "DejaVu Sans")
-
+// Default font "Libertinus Serif" looks professional enoguh
 
 #set page(
-  margin: (x: 3em, y:3em),
+  margin: 2.5cm,
+  paper: "a4",
   columns: 1
 )
 
@@ -18,20 +17,10 @@
 #show heading.where(level:1): set text(size: 1.1em)
 
 #show figure.caption: it => [
-  #strong()[
-    #it.supplement
-    #context it.counter.display(it.numbering):
-  ]
-  #it.body
+  *#it.supplement #context it.counter.display(it.numbering):* #it.body
 ]
 
-#show figure: it => [
-  #v(1.5em)
-  #it
-  #v(1.5em)
-]
-
-
+#show figure: block.with(above: 1.5em, below: 1.5em)
 
 #place(
   top+center,
@@ -69,6 +58,7 @@
   - [x] mention rapaport luebering shunt
 + [x] Glycolysis Diagram
 + [ ] Grammarly
++ [ ] Tables at sup
 
 Erythrocytes are the constituent cells of human blood. They are essential to life as they deliver oxygen from lungs to faraway tissues and collect carbon dioxide @Corrons2021. Erythrocytes are also be infection targets by parasites such as _Plasmodium falciparum_ @Paul2015; hence, it is important to identify differences between erythrocyte metabolism and parasite metabolism for developing anti-parasitic drugs with little adverse effects to the host red blood cells. In this context, our aim with this project is to identify most critical reactions in erythrocyte metabolism, which can be adversely affected by anti-parasitic drugs.
 
@@ -90,15 +80,16 @@ Another important distinction of erythrocyte glycolysis is Rapoport-Luebering Sh
 COPASI version 4.44 Build 295 @Hoops2006 was used to build and run our models. Reaction velocity formulas used are listed in @formulas. Steady state metabolite concentrations and reaction fluxes for parameter estimation were obtained from #cite(form: "prose", <Joshi1990>). R version 4.3.3 was used for the visualizations not done with COPASI.
 
 #page[
-  #set align(center)
+  // #set align(center)
   #figure(
-  diagram_glycolysis,
-  caption: [
-    Erythrocyte central metabolism.
-  ],
-  scope: "parent",
-  placement: auto
-)
+    [
+      #set text(font: "Cascadia Code", size: 8pt, weight: 400)
+      #diagram_glycolysis
+    ],
+    caption: [ Erythrocyte central metabolism. ],
+    scope: "parent",
+    placement: auto
+  )
 ]
 
 As for the experimental data, steady state concentrations of G6P(0.038mM), F6P(0.016mM), F1,6BP(0.0076mM), DHAP(0.14mM), GA3P(0.0067mM), 1,3PG(0.004mM), 3PG(0.045mM), 2PG(0.014mM), PEP(0.017mM), Pyruvate(0.077mM), ADP(0.27mM), ATP(1.5mM) and steady state flux for hexokinase (0.000311mM/s) were obtained from #cite(<Joshi1990>, form: "prose"). Additionally, Glucose concentration(5mM) were added to the experimental variables as it was the expected steady state intracellular concentration in an erythrocyte @LoyolaLeyva2022.

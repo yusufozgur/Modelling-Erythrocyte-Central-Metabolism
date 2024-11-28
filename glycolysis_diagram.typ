@@ -1,13 +1,6 @@
 #import "@preview/fletcher:0.5.2" as fletcher: diagram, node, edge
 
-#let diagram_glycolysis = {
-  set align(center)
-  set text(
-    font: "Cascadia Mono", 
-    weight: 400,
-    size: .8em
-  )
-  diagram(
+#let diagram_glycolysis = diagram(
   node-stroke: 1pt,
   edge-stroke: 1pt,
   edge(
@@ -163,6 +156,7 @@
     "ADP"
   ),
 )
-}
 
+#set page(width: auto, height: auto)
+#set text(font: "Cascadia Mono", weight: 400)
 #diagram_glycolysis

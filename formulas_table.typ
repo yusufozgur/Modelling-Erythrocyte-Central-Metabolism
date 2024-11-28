@@ -2,7 +2,7 @@
   #set par(justify: false)
   #figure(
   table(
-    columns: (1fr, 2fr),
+    columns: (1fr, 3.5fr),
     inset: (x: 0em, y: .8em),
     align: center+horizon,
     [*Name*],
