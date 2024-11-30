@@ -1,0 +1,1 @@
+This is a project done for the modelling course in Heidelberg University Systems Biology Major. Please read the main.pdf for the protocol. For plotting code in R, use Plots.R. To inspect the model, use copasi to open Model.cps.
