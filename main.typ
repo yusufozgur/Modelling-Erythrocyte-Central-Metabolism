@@ -40,20 +40,14 @@
 
 #set par(justify: true)
 
+#outline()
+
+
 = Abstract
+A model for erythrocyte central metabolism is created, which consisted of glucose transporter and reactions of glycolysis. It was shown to be robust to changes in a limited parameter value range, with some values more identifiable than others. The flux controlling reactions were determined, where hexokinase had a positive control and ATP hydrolysis had a negative control. The lack of flux control by glucose transport gives insight on anti-parasitic drug development, and the negative flux control of ATP hydrolysis possibly sheds light on autocatalytic nature of glycolysis. Lastly, it has been noted that model fitting with expanded parameter lower and upper bounds lead to suffering robustness and parameter identifiability, which may be fixed with longer parameter estimation runs.
 
 = Introduction
 
-+ [x] Define Erythrocytes
-+ [x] Relate erythrocytes with parasites
-+ [ ] Make the long parasite sentence better
-+ [x] Introduce projects aim
-+ [x] Introduce Glycolysis for erythroctes
-  - [x] mention no mito
-  - [x] mention rapaport luebering shunt
-+ [x] Glycolysis Diagram
-+ [ ] Grammarly
-+ [ ] Tables at sup
 
 Erythrocytes are the constituent cells of human blood. They are essential to life as they deliver oxygen from lungs to faraway tissues and collect carbon dioxide @Corrons2021. Erythrocytes are also infection targets of parasites such as _Plasmodium falciparum_ @Paul2015; hence, it is important to identify differences between erythrocyte metabolism and parasite metabolism for developing anti-parasitic drugs with little adverse effects to the host red blood cells. In this context, our aim with this project is to identify most critical reactions in erythrocyte metabolism, which can be adversely affected by anti-parasitic drugs.
 
@@ -64,15 +58,10 @@ Another important distinction of erythrocyte glycolysis is Rapoport-Luebering Sh
 
 = Materials and Methods
 
-+ [x] Reaction velocity formulas
-+ [ ] Experimental data
-  - [x] Steady state data
-  - [x] Flux data
-+ [x] copasi
-+ [x] r for plotting, with version
-+ [x] Add experimental data
-
 COPASI version 4.44 Build 295 @Hoops2006 was used to build and run our models. Reaction velocity formulas used are listed in @formulas. Steady state metabolite concentrations and reaction fluxes for parameter estimation were obtained from #cite(form: "prose", <Joshi1990>). R version 4.3.3 was used for the visualizations not done with COPASI.
+
+As for the experimental data, steady state concentrations of G6P(0.038mM), F6P(0.016mM), F1,6BP(0.0076mM), DHAP(0.14mM), GA3P(0.0067mM), 1,3PG(0.004mM), 3PG(0.045mM), 2PG(0.014mM), PEP(0.017mM), Pyruvate(0.077mM), ADP(0.27mM), ATP(1.5mM) and steady state flux for hexokinase (0.000311mM/s) were obtained from #cite(<Joshi1990>, form: "prose"). Additionally, Glucose concentration(5mM) were added to the experimental variables as it was the expected steady state intracellular concentration in an erythrocyte @LoyolaLeyva2022.
+
 
 #page[
   // #set align(center)
@@ -87,49 +76,14 @@ COPASI version 4.44 Build 295 @Hoops2006 was used to build and run our models. R
   )
 ]
 
-As for the experimental data, steady state concentrations of G6P(0.038mM), F6P(0.016mM), F1,6BP(0.0076mM), DHAP(0.14mM), GA3P(0.0067mM), 1,3PG(0.004mM), 3PG(0.045mM), 2PG(0.014mM), PEP(0.017mM), Pyruvate(0.077mM), ADP(0.27mM), ATP(1.5mM) and steady state flux for hexokinase (0.000311mM/s) were obtained from #cite(<Joshi1990>, form: "prose"). Additionally, Glucose concentration(5mM) were added to the experimental variables as it was the expected steady state intracellular concentration in an erythrocyte @LoyolaLeyva2022.
-
-#figure(
-  formulas_table,
-  caption: [
-    Biochemical reaction velocity formulas used in our model.
-  ],
-  placement: top,
-  scope: "parent",
-) <formulas>
-
 = Results
-+ [x] Mention this model is the simple model in a diverse array of models created
-+ [x] reactions table
-+ [x] parameters table, with citations
-+ [x] say steady state is achieved with parameter estimation
-+ [x at mat methods] mention experimental value glc 5 mM is added artificially
 
-An array of different models with differing complexity were created in our erythrocyte modelling group. I will be reporting the creation and findings of the most basic model in here. The reactions of our model are reported in @reactions.
+An array of different models with differing complexity were created in our erythrocyte modelling group. I will be reporting the creation and findings of the most basic model in here.
 
 == Model building
 
-This model includes the GLUT1 facilitative diffusion transporter, reactions of glycolysis, and energy expenditure function and a pyruvate outflux function. It does not take rapaport luebering shunt or lactate dehydrogenase into account. The reactions of our model are detailed in @reactions. The reaction parameters found on the literature are reported in @parameters. Other reaction parameters were estimated in @parameter_estimation. The species starting concentrations were specified as ATP 1.6 mM @Pospieszna2021, ADP 0.2 mM @Pospieszna2021, and Glu 5mM @LoyolaLeyva2022. All other species' starting concentrations were set to 0mM.
+This model includes the GLUT1 facilitative diffusion transporter, reactions of glycolysis, and energy expenditure function and a pyruvate outflux function. It does not take rapaport luebering shunt or lactate dehydrogenase into account. The reactions of our model are detailed in @reactions. The reaction parameters found on the literature are reported in @parameters. Other reaction parameters were estimated in @parameter_estimation. The species starting concentrations were specified as 1.6 mM for ATP @Pospieszna2021, 0.2 mM for ADP @Pospieszna2021, and 5mM for Glucose @LoyolaLeyva2022. All other species' starting concentrations were set to 0mM.
 
-#figure(
-  reactions_table,
-  caption: figure.caption(position: top)[
-    Reactions that are defined in our model.
-  ],
-  scope: "parent",
-  placement: top,
-) <reactions>
-
-#page()[
-  #figure(
-    parameters_table,
-    caption: figure.caption(position: top)[
-      Reaction parameters found in the literature.
-    ],
-    placement: top,
-    scope: "parent",
-  ) <parameters>
-]
 
 == Parameter estimation <parameter_estimation>
 
@@ -155,25 +109,6 @@ After the steady state achievement in the parameter estimation step, a time cour
 
 A steady state achievement can be deduced by inspecting the time course analysis, but it is better to run a steady state analysis and report the results. Steady state reaction fluxes can be found at @steady_state_reaction_fluxes and steady state species concentrations can be found at @steady_state_species_table.
 
-#[
-  #set text(size: .8em)
-
-  #figure(
-    steady_state_reaction_fluxes,
-    caption: figure.caption(position: top)[
-      Steady state reaction fluxes
-    ],
-  ) <steady_state_reaction_fluxes>
-
-  #figure(
-    steady_state_species_table,
-    caption: figure.caption(position: top)[
-      Steady state concentrations
-    ],
-  ) <steady_state_species_table>
-]
-
-#pagebreak()
 
 == Metabolic Control Analysis
 
@@ -188,23 +123,21 @@ To identify reaction controlling steps that can be affected by anti-parasitic dr
 
 == Model Robustness <model_robustness_section>
 
-In order to test the robustness of our model, which would mean the ability of our model to behave similarly under different parameter estimation runs, and the identifiability of our model parameters, we have run the parameter estimation for 10 times. The resulting fits were plotted in the @10_parest. It can be seen that ATP and ADP steady state concentrations were where most of the fitting errors come from.
+In order to test the robustness of our model, which would mean the ability of our model to behave similarly under different parameter estimation runs, we have run the parameter estimation for 10 times. The resulting fits were plotted in the @10_parest.
 
 #figure(
   image("img/rb_fit_plot.png", width: 30em),
   caption: [Parameter estimation step is repeated to test robustness and parameter identifiability. Black circles represent the target experimental values, and the colored dots represent different parameter sets fitted. ATP and ADP steady state concentratios were the main hurdles for fitting.],
 ) <10_parest>
 
-
-After the observation that two supersets of parameter sets can be obtained by parameter estimation, one with High ATP and Low ADP, and one with Low ATP and High ADP, we can perform MCA for testing whether our model is robust to these different fittings. In other words, we will see whether our controlling reactions change depending on different parameter estimation runs. @9_mca shows that controlling reactions across the runs are the same across the runs, and our model is robust to different parameter supersets.
+Then, MCA analyses for the parameter sets obtained from these parameter estimation runs were plotted in @9_mca. We see that all the parameter sets plotted show the same flux control coefficients as our initial MCA. This shows that our model is robust to different parameter estimation runs at parameter ranges $10^"-2" "-" 10^"+2"$.
 
 #figure(
-  image("img/mult_mca_plot.png"),
-  caption: [Multiple MCA comparison plot shows that in all parameter sets shown, reaction fluxes controlled positively by Hexokinase and negatively by Energy Expenditure.],
+  image("img/mult_mca_plot.png", width: 50%),
+  caption: [Multiple MCA comparison plot shows that in all parameter sets, reaction fluxes controlled positively by Hexokinase and negatively by Energy Expenditure.],
 ) <9_mca>
 
 == Parameter Identifiability Analysis
-+ [ ] change plot labels for parameters
 
 The parameter sets obtained during @model_robustness_section were used to test the identifiability of our model parameters that were not defined with values from the literature search. When we plot the variability of these parameters in @par_variability, some parameters show little variablity, meaning they are more identifiable, and some parameters show high variability, meaning they are less identifiable. Interestingly, some parameters, particularly $V_max$ of Hexokinase and $k_1$ of Energy expenditure, which were also the controlling steps, had their values in a very small range near the lower bounds of the parameter estimation range at $10^"-2"$. This has prompted us to perform a range expansion and repeat the parameter estimations, and test the robustness and parameter identifiability again.
 
@@ -233,25 +166,84 @@ Plotting the estimated parameter variability plot again for range expansion in @
 
 #figure(
   image("img/range_expanded_par_ident_plot.png"),
-  caption: [],
+  caption: [Distribution of parameters in range-expanded parameter estimation runs.],
 ) <range_expanded_par_ident_plot>
 
 = Discussion
-+ [ ] Talk about MCA Hexokinase
-+ [ ] Talk about MCA EngExp, probably due to decrease of autocatalytic property of glycolysis ATP
-+ [ ] ADP ATP hardest to fit probably due to this autocatalytic activity
-+ [ ] robustness of our model suffers from this ADP ATP non fitting
-+ [ ] range expansion no MCA due to increase in search space, longer training time may fix this
-+ [ ] Mention these results can be followed with drug treatment simulations
+
+Although this model was designed to be as simple as possible, we believe it holds some valuable insight into the erythrocyte glycolysis. It was able to model Hexokinase as a positive controller of reaction fluxes, but not glucose transporter. This results agree with the other, more sophisticated models in our group. This fact is important for drug development against parasites as it has been seen that in parasites such as _Plasmodium falciparum_, glucose transporter is seen as the most important reaction that needs to be targeted for inhibition @Van_Niekerk2016-ni
+
+Another flux controlling reaction captured by our model is the Energy Expenditure. It negatively controls the reactions fluxes, and it is most likely caused by the autocatalytic nature of ATP in glycolysis. In other words, if ATP is converted to ADP in a high rate, there will be less ATP to be used by upstream reactions, slowing reaction fluxes.
+
+The autocatalytic activity may also play a role in the phenomenone seen in @range_expansion_fits_plot, where failed parameter estimation runs were not able to fit ATP and ADP steady state concentrations.
+
+We have also shown that, in the narrow window of parameter ranges defined in our initial parameter estimations, our model is robust to changes in different parameter runs, being able to fit the experimental values all the time and giving the same flux control coefficients in MCA. The estimated parameters in these runs also showed similar values (@par_variability). However, Hexokinase and Energy Expenditure related reaction parameters were clustered with a low variation near the lower bounds defined. For this reason, a parameter range expansion was performed and new parameter estimations were run. Some of these runs were not able to fit ADP and ATP, and most of them showed near-zero reaction flux control coefficients in their MCA. The parameter variability was much different compared to previous runs as well (@range_expanded_par_ident_plot). This may be due to the expanded parameter space, where the optimizers did not run long enough to fit the parameters. To resolve this hypotheses, more parameter estimation runs with longer iteration should be made.
+
+For future research, our model can be expanded with drug simulation experiments. The reaction rates of some reactions in our model such glucose transporter can be artifically inhibited, simulating some anti-parasitic drugs.
 
 = Supplemental resources
-+ Put these in a github
-  + Model
-  + Plotting code
-  + data files
+
+The model, data files, and R code for plots can be found at
+
+= References
 
 #bibliography(
   "ref.bib",
   style: "american-psychological-association",
-  title: "References",
+  title: none,
 )
+
+= Supplementary figures
+
+#figure(
+  formulas_table,
+  caption: figure.caption(position: top)[
+    Biochemical reaction velocity formulas used in our model.
+  ],
+  placement: top,
+  scope: "parent",
+  supplement: [Supplementary Table],
+  kind: "supplementary",
+) <formulas>
+
+
+#figure(
+  reactions_table,
+  caption: figure.caption(position: top)[
+    Reactions that are defined in our model.
+  ],
+  scope: "parent",
+  placement: top,
+  supplement: [Supplementary Table],
+  kind: "supplementary",
+) <reactions>
+
+#figure(
+  parameters_table,
+  caption: figure.caption(position: top)[
+    Reaction parameters found in the literature.
+  ],
+  placement: top,
+  scope: "parent",
+  supplement: [Supplementary Table],
+  kind: "supplementary",
+) <parameters>
+
+
+#figure(
+  steady_state_reaction_fluxes,
+  caption: figure.caption(position: top)[
+    Steady state reaction fluxes
+  ],
+  supplement: [Supplementary Table],
+  kind: "supplementary",
+) <steady_state_reaction_fluxes>
+
+#figure(
+  steady_state_species_table,
+  caption: figure.caption(position: top)[
+    Steady state concentrations
+  ],
+  supplement: [Supplementary Table],
+  kind: "supplementary",
+) <steady_state_species_table>

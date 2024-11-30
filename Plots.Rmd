@@ -1,0 +1,402 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+#mca plot
+
+```{r}
+library(gganimate)
+library(tidyverse)
+library(data.table)
+mca <- fread("plotting_data\\main_fit_mca.txt")
+
+mca_pivot_longer <- mca %>%
+  pivot_longer(-V1,
+               names_to = "names",
+               values_to = "val")
+
+#remove summation error
+mca_pivot_longer <- mca_pivot_longer %>%
+  filter(!str_detect(names,"Summation Error"))
+
+#view(mca_pivot_longer%>%pivot_wider(names_from = names,values_from = val))
+
+mca_plot <- ggplot(mca_pivot_longer, aes(names, V1, fill=val))+
+  geom_tile(color="white")+
+  scale_fill_distiller(palette = "Spectral")+
+  scale_x_discrete(position = "top")+
+  xlab("")+
+  ylab("")+
+  labs(title="Flux Control Coefficients")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 90))
+
+#, trans=scales::pseudo_log_trans(base = 10)
+
+mca_plot
+
+ggsave("presentation/plots/mca_plot.png", plot=mca_plot)
+```
+
+
+# robustness
+
+```{r}
+rb <- fread("plotting_data\\parest_times_10.txt")
+
+rb_pivot_longer <- rb %>%
+  pivot_longer(-set,
+               names_to = "names",
+               values_to = "val")
+
+rb_w_x_name <- rb_pivot_longer %>%
+  mutate(xname = str_extract(names,"(.*?)\\.",group=1))
+
+rb_fit <- rb_w_x_name %>%
+  filter(str_detect(names,"Fitted"))
+
+rb_meas <- rb_w_x_name %>%
+  filter(str_detect(names,"Measured "))
+
+rb_fit_plot <- ggplot(rb_fit)+
+  geom_jitter(aes(x=xname, y=val, color=set))+
+  geom_point(data = rb_meas, 
+         mapping = aes(x=xname, y=val), shape=1, size=5, stroke=2)+
+  theme_minimal()+
+  xlab("")+
+  ylab("fit")
+
+rb_fit_plot
+
+ggsave("presentation/plots/rb_fit_plot.png", plot=rb_fit_plot)
+
+```
+
+spread
+```{r}
+library(tidyverse)
+library(data.table)
+
+ps_f <- list.files("plotting_data\\fits", full.names = T)
+ps_names <- str_extract(ps_f,"fits/(.*).tsv",group = 1)
+ps_names
+
+ps <- lapply(ps_f, fread)
+
+names(ps) <- ps_names
+
+ps_df <- do.call(rbind.data.frame, ps) %>%
+  mutate(par_set_name = ps_names)%>%
+  relocate(par_set_name)
+
+#Choose only the parameters used in parameter estimation
+
+par_est_parameter_list <- 
+  c(
+"(02_HK).vmax mmol/(l*s)",
+"(03_GPI).Vf mmol/(l*s)",
+"(03_GPI).Vr mmol/(l*s)",
+"(04_PFK).vmax mmol/(l*s)",
+"(05_ALD).v_f mmol/(l*s)",
+"(05_ALD).v_r mmol/(l*s)",
+"(06_TPI).Vf mmol/(l*s)",
+"(06_TPI).Vr mmol/(l*s)",
+"(07_GA3PDH).Vf mmol/(l*s)",
+"(07_GA3PDH).Vr mmol/(l*s)",
+"(08_PGK).v_f mmol/(l*s)",
+"(08_PGK).v_r mmol/(l*s)",
+"(09_PGM).V mmol/(l*s)",
+"(10_ENO).Vf mmol/(l*s)",
+"(10_ENO).Vr mmol/(l*s)",
+"(11_PK).vmax mmol/(l*s)",
+"(12_PyrExp).k1 1/s",
+"(13_EngExp).k1 1/s",
+"(01_glu).Vf mmol/(l*s)",
+"(01_glu).Vr mmol/(l*s)"
+)
+
+ps_df <- ps_df %>%
+  select(any_of(c("par_set_name",par_est_parameter_list)))
+
+ps_df_pivot <- ps_df %>%
+  pivot_longer(all_of(par_est_parameter_list),
+               names_to = "parameter",
+               values_to = "val")
+
+#apply log transformation
+##ps_df_pivot <- ps_df_pivot %>%
+##  mutate(val = 1+log10(val))
+
+#seperate main fit and identifibiability_fits
+iden_fit <- ps_df_pivot %>%
+  filter(par_set_name != "main_fit")
+
+main_fit <- ps_df_pivot %>%
+  filter(par_set_name == "main_fit")
+
+#
+x_label_mappings <- c(
+  "(02_HK).vmax mmol/(l*s)"="HK",
+  "(03_GPI).Vf mmol/(l*s)"="GPI",
+  "(03_GPI).Vr mmol/(l*s)"="GPI",
+  "(04_PFK).vmax mmol/(l*s)"="PFK",
+  "(05_ALD).v_f mmol/(l*s)"="ALD",
+  "(05_ALD).v_r mmol/(l*s)"="ALD",
+  "(06_TPI).Vf mmol/(l*s)"="TPI",
+  "(06_TPI).Vr mmol/(l*s)"="TPI",
+  "(07_GA3PDH).Vf mmol/(l*s)"="GA3PDH",
+  "(07_GA3PDH).Vr mmol/(l*s)"="GA3PDH",
+  "(08_PGK).v_f mmol/(l*s)"="PGK",
+  "(08_PGK).v_r mmol/(l*s)"="PGK",
+  "(09_PGM).V mmol/(l*s)"="PGM",
+  "(10_ENO).Vf mmol/(l*s)"="ENO",
+  "(10_ENO).Vr mmol/(l*s)"="ENO",
+  "(11_PK).vmax mmol/(l*s)"="PK",
+  "(12_PyrExp).k1 1/s"="PyrExp",
+  "(13_EngExp).k1 1/s"="EngExp",
+  "(01_glu).Vf mmol/(l*s)"="glu",
+  "(01_glu).Vr mmol/(l*s)"="glu"
+)
+
+# Most basic violin chart
+iden_fit_plot <- ggplot(iden_fit)+
+  geom_boxplot(aes(x=parameter, y=val, fill=parameter))+
+  geom_jitter(aes(x=parameter, y=val), width = .2)+
+  geom_point(data = main_fit,
+             aes(x=parameter, y=val), stroke=2, shape=1, size= 2,color="blue")+
+  theme_minimal(base_size = 15)+
+  scale_y_continuous(trans='log10',n.breaks = 8)+
+  theme(legend.position="none")+
+  labs(title = "Parameter Estimation Variability")+
+  coord_flip()+
+  scale_x_discrete(labels = x_label_mappings)+
+  ylab("")+
+  xlab("")
+
+#do proper labels
+#add main fit as seperate point
+
+ggsave("presentation/plots/iden_fit_plot.png", plot=iden_fit_plot)
+
+```
+
+mca
+```{r}
+mca <- fread("plotting_data\\mca_smallrange.txt")
+
+mca_pivot_longer <- mca %>%
+  pivot_longer(-set,
+               names_to = "names",
+               values_to = "val")
+
+firstvals <- lapply(mca_pivot_longer$names, function(x){
+  str_extract_all(x,"(\\[\\(.*?\\)\\])")[[1]][1]
+})
+
+
+secondvals <- lapply(mca_pivot_longer$names, function(x){
+  str_extract_all(x,"(\\[\\(.*?\\)\\])")[[1]][2]
+})
+
+
+mca_pivot_longer$g1 <- unlist(firstvals)
+mca_pivot_longer$g2 <- unlist(secondvals)
+
+#remove summation error
+mca_pivot_longer <- mca_pivot_longer %>%
+  filter(!str_detect(names,"Summation Error"))
+
+#view(mca_pivot_longer%>%pivot_wider(names_from = names,values_from = val))
+
+mult_mca_plot <- ggplot(mca_pivot_longer, aes(g2, g1, fill=val))+
+  geom_tile(color="white")+
+  facet_wrap("set",ncol = 3)+
+  scale_fill_distiller(palette = "Spectral")+
+  scale_x_discrete(position = "top")+
+  theme(axis.text.x = element_text(angle = 90))+
+  xlab("")+
+  ylab("")
+
+#, trans=scales::pseudo_log_trans(base = 10)
+
+ggsave("presentation/plots/mult_mca_plot.png", plot=mult_mca_plot)
+```
+
+#parident
+
+```{r}
+rb <- fread("plotting_data\\parident_scan_fits.txt")
+
+rb_pivot_longer <- rb %>%
+  pivot_longer(-set,
+               names_to = "names",
+               values_to = "val")
+
+rb_w_x_name <- rb_pivot_longer %>%
+  mutate(xname = str_extract(names,"(.*?)\\.",group=1))
+
+rb_fit <- rb_w_x_name %>%
+  filter(str_detect(names,"Fitted"))
+
+rb_meas <- rb_w_x_name %>%
+  filter(str_detect(names,"Measured "))
+
+range_expansion_fits_plot <- ggplot(rb_fit)+
+  geom_jitter(aes(x=xname, y=val, color=set))+
+  geom_point(data = rb_meas, 
+         mapping = aes(x=xname, y=val), shape=1, size=5, stroke=2)+
+  theme_minimal()+
+  xlab("")+
+  ylab("fit")
+
+ggsave("presentation/plots/range_expansion_fits_plot.png", plot=range_expansion_fits_plot)
+
+```
+
+```{r}
+mca <- fread("plotting_data\\parident_scan_mca.txt")
+
+mca_pivot_longer <- mca %>%
+  pivot_longer(-set,
+               names_to = "names",
+               values_to = "val")
+
+firstvals <- lapply(mca_pivot_longer$names, function(x){
+  str_extract_all(x,"(\\[\\(.*?\\)\\])")[[1]][1]
+})
+
+
+secondvals <- lapply(mca_pivot_longer$names, function(x){
+  str_extract_all(x,"(\\[\\(.*?\\)\\])")[[1]][2]
+})
+
+
+mca_pivot_longer$g1 <- unlist(firstvals)
+mca_pivot_longer$g2 <- unlist(secondvals)
+
+#remove summation error
+mca_pivot_longer <- mca_pivot_longer %>%
+  filter(!str_detect(names,"Summation Error"))
+
+#view(mca_pivot_longer%>%pivot_wider(names_from = names,values_from = val))
+
+range_expansion_multi_plot <- ggplot(mca_pivot_longer, aes(g2, g1, fill=val))+
+  geom_tile(color="white")+
+  facet_wrap("set",ncol = 3)+
+  scale_fill_distiller(palette = "Spectral")+
+  scale_x_discrete(position = "top")+
+  theme(axis.text.x = element_text(angle = 90))+
+  ylab("")+
+  xlab("")
+
+#, trans=scales::pseudo_log_trans(base = 10)
+ggsave("presentation/plots/range_expansion_multi_plot.png", plot=range_expansion_multi_plot)
+
+```
+
+```{r}
+ps_f <- list.files("plotting_data\\parident_parsets", full.names = T)
+ps_names <- str_extract(ps_f,"parident_parsets/(.*).tsv",group = 1)
+ps_names
+
+ps <- lapply(ps_f, fread)
+
+names(ps) <- ps_names
+
+ps_df <- do.call(rbind.data.frame, ps) %>%
+  mutate(par_set_name = ps_names)%>%
+  relocate(par_set_name)
+
+#Choose only the parameters used in parameter estimation
+
+par_est_parameter_list <- 
+  c(
+"(02_HK).vmax mmol/(l*s)",
+"(03_GPI).Vf mmol/(l*s)",
+"(03_GPI).Vr mmol/(l*s)",
+"(04_PFK).vmax mmol/(l*s)",
+"(05_ALD).v_f mmol/(l*s)",
+"(05_ALD).v_r mmol/(l*s)",
+"(06_TPI).Vf mmol/(l*s)",
+"(06_TPI).Vr mmol/(l*s)",
+"(07_GA3PDH).Vf mmol/(l*s)",
+"(07_GA3PDH).Vr mmol/(l*s)",
+"(08_PGK).v_f mmol/(l*s)",
+"(08_PGK).v_r mmol/(l*s)",
+"(09_PGM).V mmol/(l*s)",
+"(10_ENO).Vf mmol/(l*s)",
+"(10_ENO).Vr mmol/(l*s)",
+"(11_PK).vmax mmol/(l*s)",
+"(12_PyrExp).k1 1/s",
+"(13_EngExp).k1 1/s",
+"(01_glu).Vf mmol/(l*s)",
+"(01_glu).Vr mmol/(l*s)"
+)
+
+ps_df <- ps_df %>%
+  select(any_of(c("par_set_name",par_est_parameter_list)))
+
+ps_df_pivot <- ps_df %>%
+  pivot_longer(all_of(par_est_parameter_list),
+               names_to = "parameter",
+               values_to = "val")
+
+#apply log transformation
+##ps_df_pivot <- ps_df_pivot %>%
+##  mutate(val = 1+log10(val))
+
+#seperate main fit and identifibiability_fits
+iden_fit <- ps_df_pivot %>%
+  filter(par_set_name != "main_fit")
+
+main_fit <- ps_df_pivot %>%
+  filter(par_set_name == "main_fit")
+
+#
+x_label_mappings <- c(
+  "(02_HK).vmax mmol/(l*s)"="HK",
+  "(03_GPI).Vf mmol/(l*s)"="GPI",
+  "(03_GPI).Vr mmol/(l*s)"="GPI",
+  "(04_PFK).vmax mmol/(l*s)"="PFK",
+  "(05_ALD).v_f mmol/(l*s)"="ALD",
+  "(05_ALD).v_r mmol/(l*s)"="ALD",
+  "(06_TPI).Vf mmol/(l*s)"="TPI",
+  "(06_TPI).Vr mmol/(l*s)"="TPI",
+  "(07_GA3PDH).Vf mmol/(l*s)"="GA3PDH",
+  "(07_GA3PDH).Vr mmol/(l*s)"="GA3PDH",
+  "(08_PGK).v_f mmol/(l*s)"="PGK",
+  "(08_PGK).v_r mmol/(l*s)"="PGK",
+  "(09_PGM).V mmol/(l*s)"="PGM",
+  "(10_ENO).Vf mmol/(l*s)"="ENO",
+  "(10_ENO).Vr mmol/(l*s)"="ENO",
+  "(11_PK).vmax mmol/(l*s)"="PK",
+  "(12_PyrExp).k1 1/s"="PyrExp",
+  "(13_EngExp).k1 1/s"="EngExp",
+  "(01_glu).Vf mmol/(l*s)"="glu",
+  "(01_glu).Vr mmol/(l*s)"="glu"
+)
+
+# Most basic violin chart
+range_expanded_par_ident_plot <- ggplot(iden_fit)+
+  geom_boxplot(aes(x=parameter, y=val, fill=parameter))+
+  geom_jitter(aes(x=parameter, y=val), width = .2)+
+  geom_point(data = main_fit,
+             aes(x=parameter, y=val), stroke=2, shape=1, size= 2,color="blue")+
+  theme_minimal(base_size = 15)+
+  scale_y_continuous(trans='log10',n.breaks = 8)+
+  theme(legend.position="none")+
+  labs(title = "Range expanded parameter variability")+
+  coord_flip()+
+  scale_x_discrete(labels = x_label_mappings)+
+  ylab("")+
+  xlab("")
+
+#do proper labels
+#add main fit as seperate point
+
+ggsave("presentation/plots/range_expanded_par_ident_plot.png", plot=range_expanded_par_ident_plot)
+
+```
+
