@@ -181,9 +181,9 @@ We have also shown that, in the narrow window of parameter ranges defined in our
 
 For future research, our model can be expanded with drug simulation experiments. The reaction rates of some reactions in our model such glucose transporter can be artifically inhibited, simulating some anti-parasitic drugs.
 
-= Supplemental resources
+= Supplementary resources
 
-The model, data files, and R code for plots can be found at
+The model, data files, and R code for plots can be found at #link("https://github.com/yusufozgur/Modelling-Erythrocyte-Central-Metabolism")
 
 = References
 
